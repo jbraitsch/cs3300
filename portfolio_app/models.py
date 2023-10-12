@@ -1,5 +1,19 @@
 from django.db import models
 from django.urls import reverse
+from django import forms
+
+class Portfolio(models.Model):
+    AACTIVE = ((True,'True'), (False,'False'))
+    title = models.CharField(max_length=200)
+    email = models.CharField("UCCS Email", max_length=200)
+    is_active = models.BooleanField("Active", default=False, blank=True)
+    about = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title
+    
+    def get_absolute_url(self):
+        return reverse('student-detail', args=[str(self.id)])
 
 class Student(models.Model):
 
@@ -16,6 +30,7 @@ class Student(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField("UCCS Email", max_length=200)
     major = models.CharField(max_length=200, choices = MAJOR)
+    portfolio = models.OneToOneField(Portfolio, on_delete=models.CASCADE, unique=True)
 
     #Define default String to return the name for representing the Model object."
     def __str__(self):
@@ -27,3 +42,35 @@ class Student(models.Model):
     def get_absolute_url(self):
         return reverse('student-detail', args=[str(self.id)])
 
+
+class Project(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE, default = None)
+
+    def __str__(self):
+        return self.title
+    
+    def get_absolute_url(self):
+        return reverse('student-detail', args=[str(self.id)])
+
+""""
+# Model to represent the relationship between projects and portfolios.
+# Each instance of this model will have a reference to a Portfolio and a Project,
+# creating a many-to-many relationship between portfolios and projects. T
+class ProjectsInPortfolio(models.Model):
+
+    #deleting a portfolio will delete associate projects
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
+    #deleting a project will not affect the portfolio
+    #Just the entry will be removed from this table
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    class Meta:
+        #ensures that each project is associated with only one portfolio
+        constraints = [
+            models.UniqueConstraint(fields=["project"],
+                name="unique project"
+            )
+        ]
+""""
