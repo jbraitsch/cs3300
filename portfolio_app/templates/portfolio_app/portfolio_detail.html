@@ -14,19 +14,15 @@ No
 {% endif %}</p>
 <p><strong>About: </strong>{{portfolio.about}}</p>
 <p><strong>Projects:</strong></p>
-<ul>
-    {% for project in  project_list%}
-        <p>inside loop</p>
-        {% if project.portfolio == portfolio.id %}
-            <li>
-            <a href="{{ project.get_absolute_url }}">{{ project.title }}</a>
-            </li>
-        {% else %}
-            <p>No projects in this portfolio</p>
-        {% endif %}
-    {% endfor %}
+{% for i in project_list %}
+<p>in loop</p>
+<!--{% if i.portfolio.is_active %}-->
+<li class="list-group-item">
+<p><strong>Project: {{ i.title }}</strong></p>
+<a class="btn btn-primary" href="{{ i.get_absolute_url }}" role="button">View</a>
+</li>
+<!--{% endif %}-->
+{% endfor %}
 </ul>
-
-
 
 {% endblock %}
