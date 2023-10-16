@@ -1,10 +1,7 @@
 {% extends 'portfolio_app/base_template.html' %}
 
-
 {% block content %}
 <h1>Portfolio Name: {{ portfolio.title }}</h1>
-
-
 <p><strong>Email:</strong> {{ portfolio.email }}</p>
 <p><strong>Portfolio Active:</strong>
 {%if portfolio.is_active %}
@@ -15,7 +12,6 @@ No
 <p><strong>About: </strong>{{portfolio.about}}</p>
 <p><strong>Projects:</strong></p>
 {% for i in project_list %}
-<p>in loop</p>
 <!--{% if i.portfolio.is_active %}-->
 <li class="list-group-item">
 <p><strong>Project: {{ i.title }}</strong></p>
@@ -24,5 +20,5 @@ No
 <!--{% endif %}-->
 {% endfor %}
 </ul>
-
+<a class="btn btn-primary" href="{% url 'create_project' portfolio.id %}" role="button">Add Project</a>
 {% endblock %}

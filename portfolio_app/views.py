@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from .models import Student, Portfolio, Project
+from .forms import ProjectForm
 
 # Create your views here.
 def index(request):
@@ -26,3 +27,27 @@ class PortfolioDetailView(generic.DetailView):
         return context
 class ProjectDetailView(generic.DetailView):
     model = Project
+
+
+def createProject(request, portfolio_id):
+    form = ProjectForm()
+    portfolio = Portfolio.objects.get(pk=portfolio_id)
+    
+    if request.method == 'POST':
+        # Create a new dictionary with form data and portfolio_id
+        project_data = request.POST.copy()
+        project_data['portfolio_id'] = portfolio_id
+        
+        form = ProjectForm(project_data)
+        if form.is_valid():
+            # Save the form without committing to the database
+            project = form.save(commit=False)
+            # Set the portfolio relationship
+            project.portfolio = portfolio
+            project.save()
+
+            # Redirect back to the portfolio detail page
+            return redirect('portfolio-detail', portfolio_id)
+
+    context = {'form': form}
+    return render(request, 'portfolio_app/project_form.html', context)
