@@ -3,7 +3,7 @@ from django.urls import reverse
 from django import forms
 
 class Portfolio(models.Model):
-    AACTIVE = ((True,'True'), (False,'False'))
+    ACTIVE = ((True,'True'), (False,'False'))
     title = models.CharField(max_length=200)
     email = models.CharField("UCCS Email", max_length=200)
     is_active = models.BooleanField("Active", default=False, blank=True)
@@ -13,7 +13,7 @@ class Portfolio(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('student-detail', args=[str(self.id)])
+        return reverse('portfolio-detail', args=[str(self.id)])
 
 class Student(models.Model):
 
@@ -52,9 +52,9 @@ class Project(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('student-detail', args=[str(self.id)])
+        return reverse('project-detail', args=[str(self.id)])
 
-""""
+"""
 # Model to represent the relationship between projects and portfolios.
 # Each instance of this model will have a reference to a Portfolio and a Project,
 # creating a many-to-many relationship between portfolios and projects. T
@@ -73,4 +73,4 @@ class ProjectsInPortfolio(models.Model):
                 name="unique project"
             )
         ]
-""""
+"""
