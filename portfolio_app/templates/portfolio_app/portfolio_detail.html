@@ -16,6 +16,8 @@ No
 <li class="list-group-item">
 <p><strong>Project: {{ i.title }}</strong></p>
 <a class="btn btn-primary" href="{{ i.get_absolute_url }}" role="button">View</a>
+<a class="btn btn-primary" href="{% url 'delete_project' i.id %}" role="button">Delete</a>
+
 </li>
 <!--{% endif %}-->
 {% endfor %}

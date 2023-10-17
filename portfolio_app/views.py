@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views import generic
 from .models import Student, Portfolio, Project
 from .forms import ProjectForm
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -51,3 +52,13 @@ def createProject(request, portfolio_id):
 
     context = {'form': form}
     return render(request, 'portfolio_app/project_form.html', context)
+
+def deleteProject(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    context = {'project': project}
+    if request.method == 'GET':
+        return render(request, 'portfolio_app/confirm_delete.html',context)       
+    elif request.method == 'POST':
+        project.delete()
+        return redirect('portfolio-detail', project.portfolio.id)
+    
