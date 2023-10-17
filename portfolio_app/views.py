@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from .models import Student, Portfolio, Project
-from .forms import ProjectForm
+from .forms import ProjectForm, PortfolioForm
 from django.contrib import messages
 
 # Create your views here.
@@ -21,11 +21,12 @@ class PortfolioDetailView(generic.DetailView):
     model = Portfolio
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
+        # get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the p
+        # Add in a QuerySet of all the projects in portfolio
         context["project_list"] = self.object.project_set.all()
         return context
+    
 class ProjectDetailView(generic.DetailView):
     model = Project
 
@@ -76,4 +77,20 @@ def updateProject(request, portfolio_id, project_id):
             return redirect('portfolio-detail', portfolio_id)
     else:
         context = {'form': form}
-        return render(request, 'portfolio_app/project_form.html', context)   
+        return render(request, 'portfolio_app/project_form.html', context)  
+ 
+def updatePortfolio(request, portfolio_id):
+    portfolio = Portfolio.objects.get(pk=portfolio_id)
+    student = Student.objects.get(portfolio_id=portfolio_id)
+    form = PortfolioForm(instance=portfolio)
+    
+    if request.method == 'POST':
+        form = PortfolioForm(request.POST, instance=portfolio)
+        if form.is_valid():
+            portfolio.save()
+
+            # Redirect back to the portfolio detail page
+            return redirect('student-detail', student.id)
+    else:
+        context = {'form': form}
+        return render(request, 'portfolio_app/portfolio_form.html', context)  
