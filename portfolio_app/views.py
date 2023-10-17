@@ -53,12 +53,27 @@ def createProject(request, portfolio_id):
     context = {'form': form}
     return render(request, 'portfolio_app/project_form.html', context)
 
-def deleteProject(request, project_id):
+def deleteProject(request, portfolio_id, project_id):
     project = Project.objects.get(pk=project_id)
     context = {'project': project}
     if request.method == 'GET':
-        return render(request, 'portfolio_app/confirm_delete.html',context)       
+        return render(request, 'portfolio_app/project_delete.html',context)       
     elif request.method == 'POST':
         project.delete()
-        return redirect('portfolio-detail', project.portfolio.id)
+        return redirect('portfolio-detail', portfolio_id)
+
+def updateProject(request, portfolio_id, project_id):
+    portfolio = Portfolio.objects.get(pk=portfolio_id)
+    project = Project.objects.get(pk=project_id)
+    form = ProjectForm(instance=project)
     
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            project.save()
+
+            # Redirect back to the portfolio detail page
+            return redirect('portfolio-detail', portfolio_id)
+    else:
+        context = {'form': form}
+        return render(request, 'portfolio_app/project_form.html', context)   

@@ -8,8 +8,8 @@
   {% csrf_token %}
   <p>Are you sure that you want to delete the post "{{post.title}}"?</p>
   <div>
-    <button type="submit">Yes, Delete</button>
-    <a href="{% url 'portfolio-detail' project.portfolio.id %}">Cancel</a>
+    <button class="btn btn-danger" type="submit">Yes, Delete</button>
+    <a class="btn btn-primary" href="{% url 'portfolio-detail' project.portfolio.id %}"role="button">Cancel </a>
   </div>
 </form>
 

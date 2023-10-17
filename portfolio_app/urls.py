@@ -13,5 +13,6 @@ urlpatterns = [
     path('portfolio/<int:pk>', views.PortfolioDetailView.as_view(), name='portfolio-detail'),
     path('project/<int:pk>', views.ProjectDetailView.as_view(), name='project-detail' ),
     path('portfolio/<int:portfolio_id>/create_project/', views.createProject, name='create_project'),
-    path('project/<int:project_id>/delete_project',views.deleteProject, name='delete_project' ),
+    path('portfolio/<int:portfolio_id>/delete_project/<int:project_id>',views.deleteProject, name='delete_project' ),
+    path('portfolio/<int:portfolio_id>/update_project/<int:project_id>', views.updateProject, name='update_project'),
     ]
